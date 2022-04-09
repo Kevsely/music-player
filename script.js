@@ -5,6 +5,8 @@ const musicPlayer = document.querySelector("audio")
 
 const progressContainer = document.getElementById("progress-container")
 const progress = document.getElementById("progress")
+const currentTimeElmt = document.getElementById("current-time")
+const durationElmt = document.getElementById("duration")
 
 const prevBtn = document.getElementById("prev")
 const playBtn = document.getElementById("play")
@@ -86,8 +88,23 @@ function nextSong() {
 function updateProgressBar(e) {
     if (isPlaying) {
         const { duration, currentTime } = e.srcElement
+        // Update progress bar width
         const progressPercentage = (currentTime / duration) * 100
         progress.style.width = `${progressPercentage}%`
+
+        // Update the song duration
+        const durationMinutes = Math.floor(duration / 60)
+        let durationSeconds = Math.floor(duration % 60)
+        if (durationSeconds < 10)   durationSeconds = `0${durationSeconds}`
+        // Check that computed duration is ready before display it
+        if (durationSeconds) durationElmt.textContent = `${durationMinutes}:${durationSeconds}`
+        
+        // Update the song current time
+        const currentMinutes = Math.floor(currentTime / 60)
+        let currentSeconds = Math.floor(currentTime % 60)
+        if (currentSeconds < 10)   currentSeconds = `0${currentSeconds}`
+        // Check that computed current is ready before display it
+        currentTimeElmt.textContent = `${currentMinutes}:${currentSeconds}`
     }
 }
 
