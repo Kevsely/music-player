@@ -3,9 +3,12 @@ const title = document.getElementById("title")
 const artist = document.getElementById("artist")
 const musicPlayer = document.querySelector("audio")
 
-const btn_prev = document.getElementById("prev")
-const btn_play = document.getElementById("play")
-const btn_next = document.getElementById("next")
+const progressContainer = document.getElementById("progress-container")
+const progress = document.getElementById("progress")
+
+const prevBtn = document.getElementById("prev")
+const playBtn = document.getElementById("play")
+const nextBtn = document.getElementById("next")
 
 // Music 
 const songs = [
@@ -37,16 +40,16 @@ let isPlaying = false
 //Play song
 function playSong() {
     isPlaying = true
-    btn_play.classList.replace("fa-play", "fa-pause")
-    btn_play.setAttribute("title", "Pause")
+    playBtn.classList.replace("fa-play", "fa-pause")
+    playBtn.setAttribute("title", "Pause")
     musicPlayer.play()
 }
 
 //Pause song
 function pauseSong() {
     isPlaying = false
-    btn_play.classList.replace("fa-pause", "fa-play")
-    btn_play.setAttribute("title", "Play")
+    playBtn.classList.replace("fa-pause", "fa-play")
+    playBtn.setAttribute("title", "Play")
     musicPlayer.pause()
 }
 
@@ -66,7 +69,6 @@ function prevSong() {
     currentSongIndex--
     if (currentSongIndex < 0)
         currentSongIndex = songs.length - 1
-    console.log(currentSongIndex)
     loadSong(songs[currentSongIndex])
     playSong()
 }
@@ -76,15 +78,24 @@ function nextSong() {
     currentSongIndex++
     if (currentSongIndex == songs.length)
         currentSongIndex = 0
-    console.log(currentSongIndex)
     loadSong(songs[currentSongIndex])
     playSong()
+}
+
+// Update Progress Bar
+function updateProgressBar(e) {
+    if (isPlaying) {
+        const { duration, currentTime } = e.srcElement
+        const progressPercentage = (currentTime / duration) * 100
+        progress.style.width = `${progressPercentage}%`
+    }
 }
 
 // On laod - Select First Song
 loadSong(songs[currentSongIndex])
 
 // Event Listeners
-btn_play.addEventListener("click", () => (isPlaying ? pauseSong() : playSong()))
-btn_prev.addEventListener("click", prevSong)
-btn_next.addEventListener("click", nextSong)
+playBtn.addEventListener("click", () => (isPlaying ? pauseSong() : playSong()))
+prevBtn.addEventListener("click", prevSong)
+nextBtn.addEventListener("click", nextSong)
+musicPlayer.addEventListener("timeupdate", updateProgressBar)
