@@ -108,6 +108,15 @@ function updateProgressBar(e) {
     }
 }
 
+// Set the progress bar
+function setProgressBar(e) {
+    const width = e.srcElement.clientWidth
+    const clickX = e.offsetX
+    const { duration } = musicPlayer
+    
+    musicPlayer.currentTime = (duration * (clickX / width))
+}
+
 // On laod - Select First Song
 loadSong(songs[currentSongIndex])
 
@@ -116,3 +125,4 @@ playBtn.addEventListener("click", () => (isPlaying ? pauseSong() : playSong()))
 prevBtn.addEventListener("click", prevSong)
 nextBtn.addEventListener("click", nextSong)
 musicPlayer.addEventListener("timeupdate", updateProgressBar)
+progressContainer.addEventListener("click", setProgressBar)
